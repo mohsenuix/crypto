@@ -1,0 +1,5 @@
+/.idea/
+target
+*.iml
+src/main/resources/note
+src/main/resources/bitcoin
