@@ -13,9 +13,13 @@ object Secp256k1 {
         if (p == Point.O)
             return p
         val lambda = BigInteger("3") * p.x * p.x * p.y.inverse() * half
-        val x = (lambda * lambda - BigInteger("2") * p.x) % P
-        val y = lambda * (p.x - x) - p.y
-        return Point(x%P, y%P)
+        var x = (lambda * lambda - BigInteger("2") * p.x) % P
+        var y = (lambda * (p.x - x) - p.y ) % P
+        if(x < BigInteger.ZERO)
+            x += P
+        if(y < BigInteger.ZERO)
+            y += P
+        return Point(x, y)
     }
 
     fun add(p1: Point, p2: Point): Point {
@@ -28,8 +32,13 @@ object Secp256k1 {
         val deltaX = (p2.x - p1.x)
         val deltaY = (p2.y - p1.y)
         val lambda = deltaY * deltaX.inverse()
-        val x = lambda * lambda - p1.x - p2.x
-        return Point(x % P, ((lambda * (p1.x - x)) - p1.y) % P)
+        var x = (lambda * lambda - p1.x - p2.x) % P
+        var y = ((lambda * (p1.x - x)) - p1.y) % P
+        if(x < BigInteger.ZERO)
+            x += P
+        if(y < BigInteger.ZERO)
+            y += P
+        return Point(x, y)
     }
 
 
